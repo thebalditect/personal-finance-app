@@ -34,4 +34,4 @@ jobs:
           
           - name: Run Linting
             id: run-markdownlint
-            run: markdownlint-cli2 "**/*.md" "#node_modules"
+            run: markdownlint-cli2 "**/*.md" "#node_modules" --config ./.markdownlint-cli2.yaml
