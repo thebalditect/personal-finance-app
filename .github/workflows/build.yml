@@ -36,3 +36,7 @@ jobs:
             - name: Lint Python Code
               id: lint-code
               run: poetry run ruff check src tests
+            
+            - name: Run Tests
+              id: run-tests
+              run: poetry run pytest
