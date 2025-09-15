@@ -1,0 +1,25 @@
+[project]
+name = "personal-finance-app"
+version = "0.1.0"
+description = "This is a personal finance api app"
+authors = [
+    {name = "Mandar Dharmadhikari"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi (>=0.116.1,<0.117.0)",
+    "uvicorn (>=0.35.0,<0.36.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.2"
+pytestarch = "^4.0.1"
+ruff = "^0.13.0"
+
