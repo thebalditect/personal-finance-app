@@ -9,6 +9,15 @@ class Household(BaseEntity):
     description: str
 
     def __init__(self, name: str, description: str):
+
+        if not name or name.isspace():
+            raise ValueError("Household name cannot be empty or whitespace string.")
+
+        if not description or description.isspace():
+            raise ValueError(
+                "Household description cannot be empty or whitespace string."
+            )
+
         super().__init__()
 
         self.name = name
