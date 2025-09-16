@@ -46,7 +46,7 @@ def _validate_age(birth_date: datetime):
     if birth_date > datetime.now():
         raise ValueError("birth date cannot be in future.")
 
-    if birth_date == datetime.now():
+    if birth_date.date() == datetime.now().date():
         raise ValueError("birth date can not be today.")
 
     AGE_THRESHOLD: int = 16
