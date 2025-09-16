@@ -6,7 +6,7 @@ from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
 
 
 @dataclass
-class User(BaseEntity):
+class Member(BaseEntity):
     name: str
     email: str
     birth_date: datetime
