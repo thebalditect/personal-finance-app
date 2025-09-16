@@ -37,3 +37,10 @@ class Household(BaseEntity):
             )
 
         self.members.append(member)
+
+    def remove_member(self, member: Member):
+
+        for counter, existing_member in enumerate(self.members):
+            if existing_member.email.lower() == member.email.lower():
+                del self.members[counter]
+                break
