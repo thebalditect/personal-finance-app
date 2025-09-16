@@ -9,13 +9,15 @@ def test_new_should_create_user_instance():
     email = "test@value.com"
     birth_date = datetime(1989, 1, 1)
     gender = "Male"
+    avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
 
-    user = User(name, email, birth_date, gender)
+    user = User(name, email, birth_date, gender, avatar)
 
     assert user.name == name
     assert user.email == email
     assert user.birth_date == birth_date
     assert user.gender == gender
+    assert user.avatar == avatar
     assert user.id is not None
 
 
@@ -24,11 +26,12 @@ def test_invalid_name_should_raise_value_error():
     email = "mandar@test.com"
     birth_date = datetime(1989, 1, 1)
     gender = "Male"
+    avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
 
     with pytest.raises(ValueError, match="name cannot be empty or whitespace."):
-        User("", email, birth_date, gender)
+        User("", email, birth_date, gender, avatar)
     with pytest.raises(ValueError, match="name cannot be empty or whitespace."):
-        User(" ", email, birth_date, gender)
+        User(" ", email, birth_date, gender, avatar)
 
 
 def test_invalid_email_should_raise_value_error():
@@ -36,15 +39,16 @@ def test_invalid_email_should_raise_value_error():
     name = "Mandar Dharmadhikari"
     birth_date = datetime(1989, 1, 1)
     gender = "Male"
+    avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
 
     with pytest.raises(ValueError, match="email should be of format abc@example.com."):
-        User(name, "", birth_date, gender)
+        User(name, "", birth_date, gender, avatar)
 
     with pytest.raises(ValueError, match="email should be of format abc@example.com."):
-        User(name, " ", birth_date, gender)
+        User(name, " ", birth_date, gender, avatar)
 
     with pytest.raises(ValueError, match="email should be of format abc@example.com."):
-        User(name, "abc", birth_date, gender)
+        User(name, "abc", birth_date, gender, avatar)
 
 
 def test_user_should_not_be_born_in_future():
@@ -53,9 +57,10 @@ def test_user_should_not_be_born_in_future():
     email = "mandar@test.com"
     birth_date = datetime(2100, 1, 1)
     gender = "Male"
+    avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
 
     with pytest.raises(ValueError, match="birth date cannot be in future."):
-        User(name, email, birth_date, gender)
+        User(name, email, birth_date, gender, avatar)
 
 
 def test_user_should_not_be_born_today():
@@ -64,9 +69,10 @@ def test_user_should_not_be_born_today():
     email = "mandar@test.com"
     birth_date = datetime.now()
     gender = "Male"
+    avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
 
     with pytest.raises(ValueError, match="birth date can not be today."):
-        User(name, email, birth_date, gender)
+        User(name, email, birth_date, gender, avatar)
 
 
 def test_user_should_be_atleast_sixteen_years_old():
@@ -75,11 +81,12 @@ def test_user_should_be_atleast_sixteen_years_old():
     email = "mandar@test.com"
     birth_date = datetime.now() - timedelta(days=365)
     gender = "Male"
+    avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
 
     with pytest.raises(
         ValueError, match="user should be at least sixteen years old as on today."
     ):
-        User(name, email, birth_date, gender)
+        User(name, email, birth_date, gender, avatar)
 
 
 def test_gender_should_be_specified():
@@ -87,13 +94,38 @@ def test_gender_should_be_specified():
     name = "Mandar Dharmadhikari"
     email = "mandar@test.com"
     birth_date = datetime(1989, 2, 12)
+    avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
 
     with pytest.raises(
         ValueError, match="gender should not be empty or just whitespace."
     ):
-        User(name, email, birth_date, "")
+        User(name, email, birth_date, "", avatar)
 
     with pytest.raises(
         ValueError, match="gender should not be empty or just whitespace."
     ):
-        User(name, email, birth_date, " ")
+        User(name, email, birth_date, " ", avatar)
+
+
+def test_avatar_should_not_be_of_empty():
+
+    name = "Mandar Dharmadhikari"
+    email = "mandar@test.com"
+    birth_date = datetime(1989, 2, 12)
+    gender = "Male"
+    avatar = b""
+
+    with pytest.raises(ValueError, match="avatar cannot be empty."):
+        User(name, email, birth_date, gender, avatar)
+
+
+def test_avatar_should_not_be_of_other_than_png():
+
+    name = "Mandar Dharmadhikari"
+    email = "mandar@test.com"
+    birth_date = datetime(1989, 2, 12)
+    gender = "Male"
+    avatar = b"invalidbytes"
+
+    with pytest.raises(ValueError, match="avatar should be a valid png."):
+        User(name, email, birth_date, gender, avatar)

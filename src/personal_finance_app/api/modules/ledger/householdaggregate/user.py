@@ -1,4 +1,5 @@
 import re
+import imghdr
 from dataclasses import dataclass
 from datetime import datetime
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
@@ -10,19 +11,24 @@ class User(BaseEntity):
     email: str
     birth_date: datetime
     gender: str
+    avatar: bytes
 
-    def __init__(self, name: str, email: str, birth_date: datetime, gender: str):
+    def __init__(
+        self, name: str, email: str, birth_date: datetime, gender: str, avatar: bytes
+    ):
 
         _validate_name(name)
         _validate_email(email)
         _validate_age(birth_date)
         _validate_gender(gender)
+        _validate_avatar(avatar)
 
         super().__init__()
         self.name = name
         self.email = email
         self.birth_date = birth_date
         self.gender = gender
+        self.avatar = avatar
 
 
 def _calculate_age(birth_date: datetime) -> int:
@@ -61,10 +67,23 @@ def _validate_email(email: str):
 
 
 def _validate_name(name: str):
+
     if not name or name.isspace():
         raise ValueError("name cannot be empty or whitespace.")
 
 
 def _validate_gender(gender: str):
+
     if not gender or gender.isspace():
         raise ValueError("gender should not be empty or just whitespace.")
+
+
+def _validate_avatar(avatar: bytes):
+
+    if not avatar or len(avatar) == 0:
+        raise ValueError("avatar cannot be empty.")
+
+    file_type = imghdr.what(file=None, h=avatar)
+
+    if file_type != "png":
+        raise ValueError("avatar should be a valid png.")
