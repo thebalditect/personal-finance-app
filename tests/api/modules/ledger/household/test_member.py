@@ -1,5 +1,5 @@
 import pytest
-from personal_finance_app.api.modules.ledger.householdaggregate.member import Member
+from personal_finance_app.api.modules.ledger.household.member import Member
 from datetime import datetime, timedelta
 
 

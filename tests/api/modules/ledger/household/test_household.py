@@ -1,9 +1,9 @@
 import pytest
 from datetime import datetime
-from personal_finance_app.api.modules.ledger.householdaggregate.household import (
+from personal_finance_app.api.modules.ledger.household.household import (
     Household,
 )
-from personal_finance_app.api.modules.ledger.householdaggregate.member import Member
+from personal_finance_app.api.modules.ledger.household.member import Member
 
 
 def test_new_should_return_correct_household_instance():

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
-from personal_finance_app.api.modules.ledger.householdaggregate.member import Member
+from personal_finance_app.api.modules.ledger.household.member import Member
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
 
 
