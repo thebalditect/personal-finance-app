@@ -1,5 +1,6 @@
-from dataclasses import dataclass
-
+from dataclasses import dataclass, field
+from typing import List
+from personal_finance_app.api.modules.ledger.householdaggregate.member import Member
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
 
 
@@ -7,6 +8,7 @@ from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
 class Household(BaseEntity):
     name: str
     description: str
+    members: List[Member] = field(default_factory=list)
 
     def __init__(self, name: str, description: str):
 
@@ -22,3 +24,16 @@ class Household(BaseEntity):
 
         self.name = name
         self.description = description
+        self.members = []
+
+    def add_member(self, member: Member):
+
+        if any(
+            existing_member.email.lower() == member.email.lower()
+            for existing_member in self.members
+        ):
+            raise ValueError(
+                f"Member {member.email} is already a member of the household."
+            )
+
+        self.members.append(member)
