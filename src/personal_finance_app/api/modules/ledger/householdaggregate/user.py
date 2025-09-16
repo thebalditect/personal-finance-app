@@ -12,14 +12,8 @@ class User(BaseEntity):
 
     def __init__(self, name: str, email: str, birth_date: datetime):
 
-        if not name or name.isspace():
-            raise ValueError("name cannot be empty or whitespace.")
-
-        email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-
-        if re.fullmatch(email_regex, email) is None:
-            raise ValueError("email should be of format abc@example.com.")
-
+        _validate_name(name)
+        _validate_email(email)
         _validate_age(birth_date)
 
         super().__init__()
@@ -53,3 +47,16 @@ def _validate_age(birth_date: datetime):
 
     if _calculate_age(birth_date) < AGE_THRESHOLD:
         raise ValueError("user should be at least sixteen years old as on today.")
+
+
+def _validate_email(email: str):
+
+    EMAIL_REGEX = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+
+    if re.fullmatch(EMAIL_REGEX, email) is None:
+        raise ValueError("email should be of format abc@example.com.")
+
+
+def _validate_name(name: str):
+    if not name or name.isspace():
+        raise ValueError("name cannot be empty or whitespace.")
