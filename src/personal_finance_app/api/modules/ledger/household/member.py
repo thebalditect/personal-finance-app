@@ -1,5 +1,4 @@
 import re
-import imghdr
 from dataclasses import dataclass
 from datetime import datetime
 from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
@@ -92,7 +91,5 @@ def _validate_avatar(avatar: bytes):
     if not avatar or len(avatar) == 0:
         raise ValueError("avatar cannot be empty.")
 
-    file_type = imghdr.what(file=None, h=avatar)
-
-    if file_type != "png":
+    if not avatar.startswith(b"\x89PNG\r\n\x1a\n"):
         raise ValueError("avatar should be a valid png.")
