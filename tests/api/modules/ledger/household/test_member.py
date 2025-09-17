@@ -141,3 +141,16 @@ def test_avatar_should_not_be_of_other_than_png():
 
     with pytest.raises(ValueError, match="avatar should be a valid png."):
         Member(name, email, birth_date, gender, avatar, role)
+
+
+def test_default_role_assigned_should_be_regular_if_not_specified():
+
+    name = "Mandar Dharmadhikari"
+    email = "test@value.com"
+    birth_date = datetime(1989, 1, 1)
+    gender = "Male"
+    avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
+
+    member = Member(name, email, birth_date, gender, avatar, None)
+
+    assert member.role == MemberRole.REGULAR

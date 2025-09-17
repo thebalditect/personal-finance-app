@@ -12,7 +12,7 @@ class Member(BaseEntity):
     birth_date: datetime
     gender: str
     avatar: bytes
-    role: MemberRole
+    role: MemberRole | None
 
     def __init__(
         self,
@@ -21,7 +21,7 @@ class Member(BaseEntity):
         birth_date: datetime,
         gender: str,
         avatar: bytes,
-        role: MemberRole,
+        role: MemberRole | None,
     ):
 
         _validate_name(name)
@@ -36,7 +36,11 @@ class Member(BaseEntity):
         self.birth_date = birth_date
         self.gender = gender
         self.avatar = avatar
-        self.role = role
+
+        if role is None:
+            self.role = MemberRole.REGULAR
+        else:
+            self.role = role
 
 
 def _calculate_age(birth_date: datetime) -> int:
