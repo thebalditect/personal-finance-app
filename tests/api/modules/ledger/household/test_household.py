@@ -4,6 +4,7 @@ from personal_finance_app.api.modules.ledger.household.household import (
     Household,
 )
 from personal_finance_app.api.modules.ledger.household.member import Member
+from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
 
 
 def test_new_should_return_correct_household_instance():
@@ -64,8 +65,9 @@ def test_add_member_should_add_member_to_household():
     birth_date = datetime(1986, 1, 1)
     gender = "Male"
     avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
+    role = MemberRole.ADMINISTRATOR
 
-    member = Member(name, email, birth_date, gender, avatar)
+    member = Member(name, email, birth_date, gender, avatar, role)
 
     hosehold_name = "The Balditect Household."
     household_decription = "This is the description of the balditect household."
@@ -91,8 +93,9 @@ def test_same_user_cannot_be_added_again_to_the_household():
     birth_date = datetime(1986, 1, 1)
     gender = "Male"
     avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
+    role = MemberRole.ADMINISTRATOR
 
-    member = Member(name, email, birth_date, gender, avatar)
+    member = Member(name, email, birth_date, gender, avatar, role)
 
     household.add_member(member)
 
@@ -114,11 +117,13 @@ def test_remove_user_should_remove_user_from_the_household():
     birth_date = datetime(1986, 1, 1)
     gender = "Male"
     avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
+    role = MemberRole.ADMINISTRATOR
 
-    member1 = Member(name, email, birth_date, gender, avatar)
+    member1 = Member(name, email, birth_date, gender, avatar, role)
 
     email2 = "test@test.com"
-    member2 = Member(name, email2, birth_date, gender, avatar)
+    role2 = MemberRole.REGULAR
+    member2 = Member(name, email2, birth_date, gender, avatar, role2)
 
     household.add_member(member1)
     household.add_member(member2)

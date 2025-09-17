@@ -2,6 +2,7 @@ import re
 import imghdr
 from dataclasses import dataclass
 from datetime import datetime
+from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
 
 
@@ -12,9 +13,16 @@ class Member(BaseEntity):
     birth_date: datetime
     gender: str
     avatar: bytes
+    role: MemberRole
 
     def __init__(
-        self, name: str, email: str, birth_date: datetime, gender: str, avatar: bytes
+        self,
+        name: str,
+        email: str,
+        birth_date: datetime,
+        gender: str,
+        avatar: bytes,
+        role: MemberRole,
     ):
 
         _validate_name(name)
@@ -29,6 +37,7 @@ class Member(BaseEntity):
         self.birth_date = birth_date
         self.gender = gender
         self.avatar = avatar
+        self.role = role
 
 
 def _calculate_age(birth_date: datetime) -> int:
