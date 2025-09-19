@@ -2,9 +2,11 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from datetime import datetime
+from typing import List
 from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
-from personal_finance_app.api.sharedkernel.domain.result import Result
+from personal_finance_app.api.sharedkernel.domain.error_type import ErrorType
+from personal_finance_app.api.sharedkernel.domain.result import Result, Error
 
 
 @dataclass
@@ -53,6 +55,80 @@ class Member(BaseEntity):
         avatar: bytes,
         role: MemberRole | None,
     ) -> Result[Member]:
+
+        errors: List[Error] = []
+
+        if not name or name.isspace():
+            error = Error(
+                code="Ledger.Household.ValidationError",
+                description="name cannot be empty or whitespace.",
+                error_type=ErrorType.VALIDATION,
+            )
+            errors.append(error)
+
+        EMAIL_REGEX = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        if re.fullmatch(EMAIL_REGEX, email) is None:
+            error = Error(
+                code="Ledger.Household.ValidationError",
+                description="email should be of format abc@example.com.",
+                error_type=ErrorType.VALIDATION,
+            )
+            errors.append(error)
+
+        if not gender or gender.isspace():
+            error = Error(
+                code="Ledger.Household.ValidationError",
+                description="gender should not be empty or just whitespace.",
+                error_type=ErrorType.VALIDATION,
+            )
+            errors.append(error)
+
+        if (
+            not avatar
+            or len(avatar) == 0
+            or not avatar.startswith(b"\x89PNG\r\n\x1a\n")
+        ):
+            error = Error(
+                code="Ledger.Household.ValidationError",
+                description="avatar should be a valid png.",
+                error_type=ErrorType.VALIDATION,
+            )
+            errors.append(error)
+
+        if birth_date.date() == datetime.now().date():
+
+            error = Error(
+                code="Ledger.Household.ValidationError",
+                description="birth date can not be today.",
+                error_type=ErrorType.VALIDATION,
+            )
+            errors.append(error)
+
+        if birth_date > datetime.now():
+            error = Error(
+                code="Ledger.Household.ValidationError",
+                description="birth date cannot be in future.",
+                error_type=ErrorType.VALIDATION,
+            )
+            errors.append(error)
+
+        AGE_THRESHOLD: int = 16
+
+        if (
+            _calculate_age(birth_date) < AGE_THRESHOLD
+            and birth_date <= datetime.now()
+            and birth_date.date() != datetime.now().date()
+        ):
+
+            error = Error(
+                code="Ledger.Household.ValidationError",
+                description="member should be at least sixteen years old as on today.",
+                error_type=ErrorType.VALIDATION,
+            )
+            errors.append(error)
+
+        if len(errors) > 0:
+            return Result.failure(errors=errors)
 
         member = Member(
             name=name,

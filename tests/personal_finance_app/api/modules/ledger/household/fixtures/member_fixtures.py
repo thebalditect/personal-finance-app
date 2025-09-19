@@ -26,3 +26,23 @@ def valid_member_data():
         avatar=b"\x89PNG\r\n\x1a\n" + b"somebytes",
         role=MemberRole.ADMINISTRATOR,
     )
+
+
+@pytest.fixture
+def invalid_member_name():
+    return ["", " "]
+
+
+@pytest.fixture
+def invalid_member_email():
+    return ["", " ", "invalid email", "invalid@1", ".com"]
+
+
+@pytest.fixture
+def invalid_member_gender():
+    return ["", " "]
+
+
+@pytest.fixture
+def invalid_member_avatar():
+    return [b"", b" "]
