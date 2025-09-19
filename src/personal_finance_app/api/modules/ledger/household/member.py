@@ -46,8 +46,9 @@ class Member(BaseEntity):
         else:
             self.role = role
 
-    @staticmethod
+    @classmethod
     def create(
+        cls,
         name: str,
         email: str,
         birth_date: datetime,
@@ -58,40 +59,14 @@ class Member(BaseEntity):
 
         errors: List[Error] = []
 
-        if not name or name.isspace():
-            error = HouseholdErrors.invalid_name()
-            errors.append(error)
-
-        EMAIL_REGEX = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        if re.fullmatch(EMAIL_REGEX, email) is None:
-            error = HouseholdErrors.invalid_email()
-            errors.append(error)
-
-        if not gender or gender.isspace():
-            error = HouseholdErrors.invalid_gender()
-            errors.append(error)
-
-        if (
-            not avatar
-            or len(avatar) == 0
-            or not avatar.startswith(b"\x89PNG\r\n\x1a\n")
+        for validate in (
+            lambda: cls._validate_name(name),
+            lambda: cls._validate_email(email),
+            lambda: cls._validate_age(birth_date),
+            lambda: cls._validate_gender(gender),
+            lambda: cls._validate_avatar(avatar),
         ):
-            error = HouseholdErrors.invalid_image_format()
-            errors.append(error)
-
-        if birth_date.date() > datetime.now().date():
-            error = HouseholdErrors.unborn_member()
-            errors.append(error)
-
-        AGE_THRESHOLD: int = 16
-
-        if (
-            _calculate_age(birth_date) < AGE_THRESHOLD
-            and birth_date.date() <= datetime.now().date()
-        ):
-
-            error = HouseholdErrors.member_younger_than_sixteen_years_of_age()
-            errors.append(error)
+            errors.extend(validate())
 
         if len(errors) > 0:
             return Result.failure(errors=errors)
@@ -105,6 +80,73 @@ class Member(BaseEntity):
             role=role,
         )
         return Result.success(member)
+
+    @staticmethod
+    def _validate_name(name: str) -> List[Error]:
+        if not name or name.isspace():
+            return [HouseholdErrors.invalid_name()]
+
+        return []
+
+    @staticmethod
+    def _validate_email(email: str) -> List[Error]:
+        EMAIL_REGEX = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        if re.fullmatch(EMAIL_REGEX, email) is None:
+            return [HouseholdErrors.invalid_email()]
+
+        return []
+
+    @staticmethod
+    def _validate_gender(gender: str) -> List[Error]:
+        if not gender or gender.isspace():
+            return [HouseholdErrors.invalid_gender()]
+
+        return []
+
+    @staticmethod
+    def _validate_avatar(avatar: bytes) -> List[Error]:
+        if (
+            not avatar
+            or len(avatar) == 0
+            or not avatar.startswith(b"\x89PNG\r\n\x1a\n")
+        ):
+            return [HouseholdErrors.invalid_image_format()]
+
+        return []
+
+    @staticmethod
+    def _validate_age(birth_date: datetime) -> List[Error]:
+        if birth_date.date() > datetime.now().date():
+            error = HouseholdErrors.unborn_member()
+            return [error]
+
+        AGE_THRESHOLD: int = 16
+
+        if (
+            _calculate_age(birth_date) < AGE_THRESHOLD
+            and birth_date.date() <= datetime.now().date()
+        ):
+
+            error = HouseholdErrors.member_younger_than_sixteen_years_of_age()
+            return [error]
+
+        return []
+
+    @staticmethod
+    def _calculate_age(birth_date: datetime) -> int:
+
+        reference_date = datetime.today()
+
+        age = reference_date.year - birth_date.year
+
+        # Adjust if birthday hasn't occurred this year yet
+        if (reference_date.month, reference_date.day) < (
+            birth_date.month,
+            birth_date.day,
+        ):
+            age -= 1
+
+        return age
 
 
 def _calculate_age(birth_date: datetime) -> int:
