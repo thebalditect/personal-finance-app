@@ -16,16 +16,7 @@ class Household(BaseEntity):
 
     def __init__(self, name: str, description: str):
 
-        if not name or name.isspace():
-            raise ValueError("Household name cannot be empty or whitespace string.")
-
-        if not description or description.isspace():
-            raise ValueError(
-                "Household description cannot be empty or whitespace string."
-            )
-
         super().__init__()
-
         self.name = name
         self.description = description
         self.members = []
@@ -48,14 +39,18 @@ class Household(BaseEntity):
 
     @staticmethod
     def _validate_name(name: str) -> List[Error]:
+
         if not name or name.isspace():
             return [HouseholdErrors.invalid_name()]
+
         return []
 
     @staticmethod
     def _validate_description(description: str) -> List[Error]:
+
         if not description or description.isspace():
             return [HouseholdErrors.invalid_description()]
+
         return []
 
     def add_member(self, member: Member):
