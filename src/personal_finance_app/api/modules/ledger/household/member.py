@@ -1,8 +1,10 @@
+from __future__ import annotations
 import re
 from dataclasses import dataclass
 from datetime import datetime
 from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
+from personal_finance_app.api.sharedkernel.domain.result import Result
 
 
 @dataclass
@@ -41,6 +43,26 @@ class Member(BaseEntity):
             self.role = MemberRole.REGULAR
         else:
             self.role = role
+
+    @staticmethod
+    def create(
+        name: str,
+        email: str,
+        birth_date: datetime,
+        gender: str,
+        avatar: bytes,
+        role: MemberRole | None,
+    ) -> Result[Member]:
+
+        member = Member(
+            name=name,
+            email=email,
+            birth_date=birth_date,
+            gender=gender,
+            avatar=avatar,
+            role=role,
+        )
+        return Result.success(member)
 
 
 def _calculate_age(birth_date: datetime) -> int:

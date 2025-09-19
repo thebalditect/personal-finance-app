@@ -5,6 +5,30 @@ from datetime import datetime, timedelta
 from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
 
 
+def test_create_should_return_success_result(valid_member_data):
+
+    result = Member.create(
+        valid_member_data.name,
+        valid_member_data.email,
+        valid_member_data.birth_date,
+        valid_member_data.gender,
+        valid_member_data.avatar,
+        valid_member_data.role,
+    )
+
+    assert result.is_success
+    assert not result.is_failure
+
+    member = result.value
+    assert member.name == valid_member_data.name
+    assert member.email == valid_member_data.email
+    assert member.birth_date == valid_member_data.birth_date
+    assert member.gender == valid_member_data.gender
+    assert member.avatar == valid_member_data.avatar
+    assert member.role == valid_member_data.role
+    assert member.id is not None
+
+
 def test_new_should_create_user_instance(valid_member_data):
     user = Member(
         valid_member_data.name,
