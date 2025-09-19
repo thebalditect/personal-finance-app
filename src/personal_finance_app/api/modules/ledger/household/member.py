@@ -6,7 +6,6 @@ from typing import List
 from personal_finance_app.api.modules.ledger.household.errors import HouseholdErrors
 from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
-from personal_finance_app.api.sharedkernel.domain.error_type import ErrorType
 from personal_finance_app.api.sharedkernel.domain.result import Result, Error
 
 
@@ -80,16 +79,7 @@ class Member(BaseEntity):
             error = HouseholdErrors.invalid_image_format()
             errors.append(error)
 
-        if birth_date.date() == datetime.now().date():
-
-            error = Error(
-                code="Ledger.Household.ValidationError",
-                description="birth date can not be today.",
-                error_type=ErrorType.VALIDATION,
-            )
-            errors.append(error)
-
-        if birth_date > datetime.now():
+        if birth_date.date() > datetime.now().date():
             error = HouseholdErrors.unborn_member()
             errors.append(error)
 
@@ -97,15 +87,10 @@ class Member(BaseEntity):
 
         if (
             _calculate_age(birth_date) < AGE_THRESHOLD
-            and birth_date <= datetime.now()
-            and birth_date.date() != datetime.now().date()
+            and birth_date.date() <= datetime.now().date()
         ):
 
-            error = Error(
-                code="Ledger.Household.ValidationError",
-                description="member should be at least sixteen years old as on today.",
-                error_type=ErrorType.VALIDATION,
-            )
+            error = HouseholdErrors.member_younger_than_sixteen_years_of_age()
             errors.append(error)
 
         if len(errors) > 0:

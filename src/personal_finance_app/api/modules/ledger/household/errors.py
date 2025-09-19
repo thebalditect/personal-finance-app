@@ -44,3 +44,11 @@ class HouseholdErrors:
             description="birth date cannot be in future.",
             error_type=ErrorType.VALIDATION,
         )
+
+    @classmethod
+    def member_younger_than_sixteen_years_of_age(cls):
+        return Error(
+            code=cls.ERROR_CODE,
+            description="member should be at least sixteen years old as on today.",
+            error_type=ErrorType.VALIDATION,
+        )

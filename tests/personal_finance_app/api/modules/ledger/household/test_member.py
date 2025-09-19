@@ -1,10 +1,8 @@
 import pytest
+from datetime import datetime, timedelta
 from personal_finance_app.api.modules.ledger.household.errors import HouseholdErrors
 from personal_finance_app.api.modules.ledger.household.member import Member
-from datetime import datetime, timedelta
-
 from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
-from personal_finance_app.api.sharedkernel.domain.error import Error, ErrorType
 
 
 def test_create_should_return_success_result(valid_member_data):
@@ -147,33 +145,6 @@ def test_if_not_specified_default_member_role_should_be_regular(valid_member_dat
     assert member.id is not None
 
 
-def test_create_should_return_failure_result_while_creating_member_born_today(
-    valid_member_data,
-):
-
-    birth_date = datetime.now()
-    result = Member.create(
-        valid_member_data.name,
-        valid_member_data.email,
-        birth_date,
-        valid_member_data.gender,
-        valid_member_data.avatar,
-        valid_member_data.role,
-    )
-
-    assert result.is_failure
-    assert not result.is_success
-
-    expected_error = Error(
-        code="Ledger.Household.ValidationError",
-        description="birth date can not be today.",
-        error_type=ErrorType.VALIDATION,
-    )
-
-    assert len(result.errors) == 1
-    assert result.errors[0] == expected_error
-
-
 def test_create_should_return_failure_result_while_creating_unborn_member(
     valid_member_data,
 ):
@@ -210,15 +181,10 @@ def test_create_should_return_failure_result_while_creating_member_younger_than_
 
     assert result.is_failure
     assert not result.is_success
-
-    expected_error = Error(
-        code="Ledger.Household.ValidationError",
-        description="member should be at least sixteen years old as on today.",
-        error_type=ErrorType.VALIDATION,
-    )
-
     assert len(result.errors) == 1
-    assert result.errors[0] == expected_error
+    assert (
+        result.errors[0] == HouseholdErrors.member_younger_than_sixteen_years_of_age()
+    )
 
 
 # To Be deleted
