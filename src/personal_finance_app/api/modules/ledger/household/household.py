@@ -53,21 +53,22 @@ class Household(BaseEntity):
 
         return []
 
-    def add_member(self, member: Member):
+    def add_member(self, member: Member) -> Result[None]:
 
         if any(
             existing_member.email.lower() == member.email.lower()
             for existing_member in self.members
         ):
-            raise ValueError(
-                f"Member {member.email} is already a member of the household."
+            return Result.failure(
+                [HouseholdErrors.member_already_added_to_household(member.email)]
             )
 
         self.members.append(member)
+        return Result.success(None)
 
-    def remove_member(self, member: Member):
+    def remove_member(self, member: Member) -> Result[None]:
 
         for counter, existing_member in enumerate(self.members):
             if existing_member.email.lower() == member.email.lower():
                 del self.members[counter]
-                break
+                return Result.success(None)

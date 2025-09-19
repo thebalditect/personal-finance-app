@@ -60,3 +60,11 @@ class HouseholdErrors:
             description="member should be at least sixteen years old as on today.",
             error_type=ErrorType.VALIDATION,
         )
+
+    @classmethod
+    def member_already_added_to_household(cls, email: str):
+        return Error(
+            code=cls.ERROR_CODE,
+            description=f"Member with {email} is already a member of the household.",
+            error_type=ErrorType.VALIDATION,
+        )

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import pytest
 
+from personal_finance_app.api.modules.ledger.household.member import Member
 from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
 
 
@@ -46,3 +47,15 @@ def invalid_member_gender():
 @pytest.fixture
 def invalid_member_avatar():
     return [b"", b" "]
+
+
+@pytest.fixture
+def valid_member(valid_member_data) -> Member:
+    return Member.create(
+        valid_member_data.name,
+        valid_member_data.email,
+        valid_member_data.birth_date,
+        valid_member_data.gender,
+        valid_member_data.avatar,
+        valid_member_data.role,
+    ).value

@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 import pytest
 
+from personal_finance_app.api.modules.ledger.household.household import Household
+
 
 @dataclass
 class HouseholdData:
@@ -29,3 +31,10 @@ def invalid_household_description():
 @pytest.fixture
 def invalid_household_data():
     return HouseholdData(name="", description="")
+
+
+@pytest.fixture
+def valid_household(valid_household_data) -> Household:
+    return Household.create(
+        valid_household_data.name, valid_household_data.description
+    ).value
