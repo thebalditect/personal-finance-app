@@ -24,3 +24,8 @@ def invalid_household_name():
 @pytest.fixture
 def invalid_household_description():
     return ["", " "]
+
+
+@pytest.fixture
+def invalid_household_data():
+    return HouseholdData(name="", description="")

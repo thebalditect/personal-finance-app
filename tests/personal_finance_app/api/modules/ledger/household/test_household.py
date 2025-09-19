@@ -45,6 +45,26 @@ def test_create_should_return_failure_result_for_invalid_household_description(
         assert result.errors[0] == HouseholdErrors.invalid_description()
 
 
+def test_create_should_return_all_validation_errors_with_failure_result(
+    invalid_household_data,
+):
+
+    result = Household.create(
+        invalid_household_data.name, invalid_household_data.description
+    )
+
+    assert result.is_failure
+    assert not result.is_success
+    assert len(result.errors) == 2
+
+    expected_errors = [
+        HouseholdErrors.invalid_name(),
+        HouseholdErrors.invalid_description(),
+    ]
+
+    assert result.errors == expected_errors
+
+
 def test_new_should_return_correct_household_instance():
 
     household_name = "The Balditect House"
