@@ -105,7 +105,6 @@ def test_remove_member_should_return_success_result(valid_household, valid_membe
 
     assert remove_member_result.is_success
     assert not remove_member_result.is_failure
-    assert len(remove_member_result.errors) == 0
 
 
 def test_remove_user_should_return_failure_result_while_removing_non_existent_member(

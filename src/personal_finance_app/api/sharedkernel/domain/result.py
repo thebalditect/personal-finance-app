@@ -9,24 +9,36 @@ T = TypeVar("T")
 
 @dataclass(frozen=True)
 class Result(Generic[T]):
-    value: Optional[T]
-    errors: Optional[List[T]]
+    _value: Optional[T]
+    _errors: Optional[List[T]]
 
     @property
     def is_success(self) -> bool:
-        return self.errors is None or len(self.errors) == 0
+        return self._errors is None or len(self._errors) == 0
 
     @property
     def is_failure(self) -> bool:
         return not self.is_success
 
+    @property
+    def value(self) -> T:
+        if self.is_failure:
+            raise AttributeError("Cannot access `value` on a failed result.")
+        return self._value
+
+    @property
+    def errors(self) -> List[Error]:
+        if self.is_success:
+            raise AttributeError("Cannot access `errors` on a success result.")
+        return self._errors
+
     @staticmethod
     def success(value: T) -> Result[T]:
-        return Result(value, errors=[])
+        return Result(_value=value, _errors=[])
 
     @staticmethod
     def failure(errors: Union[Error, List[Error]]) -> Result[T]:
 
         if isinstance(errors, Error):
             errors = [errors]
-        return Result(value=None, errors=errors)
+        return Result(_value=None, _errors=errors)
