@@ -1,4 +1,5 @@
 import pytest
+from personal_finance_app.api.modules.ledger.household.errors import HouseholdErrors
 from personal_finance_app.api.modules.ledger.household.member import Member
 from datetime import datetime, timedelta
 
@@ -65,12 +66,7 @@ def test_for_invalid_name_create_should_return_failure_result(
         assert result.is_failure
         assert not result.is_success
         assert len(result.errors) == 1
-        expected_error = Error(
-            code="Ledger.Household.ValidationError",
-            description="name cannot be empty or whitespace.",
-            error_type=ErrorType.VALIDATION,
-        )
-        assert result.errors[0] == expected_error
+        assert result.errors[0] == HouseholdErrors.invalid_name()
 
 
 def test_for_invalid_email_create_should_return_failure_result(
@@ -89,12 +85,7 @@ def test_for_invalid_email_create_should_return_failure_result(
         assert result.is_failure
         assert not result.is_success
         assert len(result.errors) == 1
-        expected_error = Error(
-            code="Ledger.Household.ValidationError",
-            description="email should be of format abc@example.com.",
-            error_type=ErrorType.VALIDATION,
-        )
-        assert result.errors[0] == expected_error
+        assert result.errors[0] == HouseholdErrors.invalid_email()
 
 
 def test_for_invalid_gender_create_should_return_failure_result(
@@ -112,12 +103,7 @@ def test_for_invalid_gender_create_should_return_failure_result(
         assert result.is_failure
         assert not result.is_success
         assert len(result.errors) == 1
-        expected_error = Error(
-            code="Ledger.Household.ValidationError",
-            description="gender should not be empty or just whitespace.",
-            error_type=ErrorType.VALIDATION,
-        )
-        assert result.errors[0] == expected_error
+        assert result.errors[0] == HouseholdErrors.invalid_gender()
 
 
 def test_for_non_png_type_avatar_create_should_return_failure_result(
@@ -135,12 +121,7 @@ def test_for_non_png_type_avatar_create_should_return_failure_result(
         assert result.is_failure
         assert not result.is_success
         assert len(result.errors) == 1
-        expected_error = Error(
-            code="Ledger.Household.ValidationError",
-            description="avatar should be a valid png.",
-            error_type=ErrorType.VALIDATION,
-        )
-        assert result.errors[0] == expected_error
+        assert result.errors[0] == HouseholdErrors.invalid_image_format()
 
 
 def test_if_not_specified_default_member_role_should_be_regular(valid_member_data):
@@ -209,15 +190,8 @@ def test_create_should_return_failure_result_while_creating_unborn_member(
 
     assert result.is_failure
     assert not result.is_success
-
-    expected_error = Error(
-        code="Ledger.Household.ValidationError",
-        description="birth date cannot be in future.",
-        error_type=ErrorType.VALIDATION,
-    )
-
     assert len(result.errors) == 1
-    assert result.errors[0] == expected_error
+    assert result.errors[0] == HouseholdErrors.unborn_member()
 
 
 def test_create_should_return_failure_result_while_creating_member_younger_than_sixteen_years(
@@ -247,6 +221,7 @@ def test_create_should_return_failure_result_while_creating_member_younger_than_
     assert result.errors[0] == expected_error
 
 
+# To Be deleted
 def test_invalid_name_should_raise_value_error():
 
     email = "mandar@test.com"
