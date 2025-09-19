@@ -91,7 +91,7 @@ def test_add_member_should_return_failure_result_for_already_added_member(
     )
 
 
-def test_remove_user_should_return_success_result(valid_household, valid_member):
+def test_remove_member_should_return_success_result(valid_household, valid_member):
 
     household = valid_household
     member = valid_member
@@ -106,3 +106,20 @@ def test_remove_user_should_return_success_result(valid_household, valid_member)
     assert remove_member_result.is_success
     assert not remove_member_result.is_failure
     assert len(remove_member_result.errors) == 0
+
+
+def test_remove_user_should_return_failure_result_while_removing_non_existent_member(
+    valid_household, valid_member
+):
+
+    household = valid_household
+    member = valid_member
+
+    result = household.remove_member(member)
+
+    assert result.is_failure
+    assert not result.is_success
+    assert len(result.errors) == 1
+    assert result.errors[0] == HouseholdErrors.member_does_not_exist_in_household(
+        member.email
+    )

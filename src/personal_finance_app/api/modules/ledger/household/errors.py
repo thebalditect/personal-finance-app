@@ -4,6 +4,7 @@ from personal_finance_app.api.sharedkernel.domain.error_type import ErrorType
 
 class HouseholdErrors:
     ERROR_CODE = "Ledger.Household.ValidationError"
+    NOT_FOUND_ERROR_CODE = "Ledger.Household.NotFoundError"
 
     @classmethod
     def invalid_name(cls) -> Error:
@@ -67,4 +68,12 @@ class HouseholdErrors:
             code=cls.ERROR_CODE,
             description=f"Member with {email} is already a member of the household.",
             error_type=ErrorType.VALIDATION,
+        )
+
+    @classmethod
+    def member_does_not_exist_in_household(cls, email: str):
+        return Error(
+            code=cls.NOT_FOUND_ERROR_CODE,
+            description=f"Member with {email} is not an existing member of the household.",
+            error_type=ErrorType.NOT_FOUND,
         )

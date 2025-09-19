@@ -68,6 +68,18 @@ class Household(BaseEntity):
 
     def remove_member(self, member: Member) -> Result[None]:
 
+        if not any(
+            existing_member.email.lower() == member.email.lower()
+            for existing_member in self.members
+        ):
+            return Result.failure(
+                [
+                    HouseholdErrors.member_does_not_exist_in_household(
+                        member.email.lower()
+                    )
+                ]
+            )
+
         for counter, existing_member in enumerate(self.members):
             if existing_member.email.lower() == member.email.lower():
                 del self.members[counter]
