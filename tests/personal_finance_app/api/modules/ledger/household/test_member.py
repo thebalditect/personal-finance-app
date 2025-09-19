@@ -5,23 +5,22 @@ from datetime import datetime, timedelta
 from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
 
 
-def test_new_should_create_user_instance():
+def test_new_should_create_user_instance(valid_member_data):
+    user = Member(
+        valid_member_data.name,
+        valid_member_data.email,
+        valid_member_data.birth_date,
+        valid_member_data.gender,
+        valid_member_data.avatar,
+        valid_member_data.role,
+    )
 
-    name = "Mandar Dharmadhikari"
-    email = "test@value.com"
-    birth_date = datetime(1989, 1, 1)
-    gender = "Male"
-    avatar = b"\x89PNG\r\n\x1a\n" + b"somebytes"
-    role = MemberRole.ADMINISTRATOR
-
-    user = Member(name, email, birth_date, gender, avatar, role)
-
-    assert user.name == name
-    assert user.email == email
-    assert user.birth_date == birth_date
-    assert user.gender == gender
-    assert user.avatar == avatar
-    assert user.role == role
+    assert user.name == valid_member_data.name
+    assert user.email == valid_member_data.email
+    assert user.birth_date == valid_member_data.birth_date
+    assert user.gender == valid_member_data.gender
+    assert user.avatar == valid_member_data.avatar
+    assert user.role == valid_member_data.role
     assert user.id is not None
 
 
