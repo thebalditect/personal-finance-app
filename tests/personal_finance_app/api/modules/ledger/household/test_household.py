@@ -1,10 +1,48 @@
 import pytest
 from datetime import datetime
+from personal_finance_app.api.modules.ledger.household.errors import HouseholdErrors
 from personal_finance_app.api.modules.ledger.household.household import (
     Household,
 )
 from personal_finance_app.api.modules.ledger.household.member import Member
 from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
+
+
+def test_create_should_return_success_result(valid_household_data):
+
+    result = Household.create(
+        name=valid_household_data.name, description=valid_household_data.description
+    )
+    assert result.is_success
+    assert not result.is_failure
+    assert result.value.name == valid_household_data.name
+    assert result.value.description == valid_household_data.description
+
+
+def test_create_should_return_failure_result_for_invalid_household_name(
+    valid_household_data, invalid_household_name
+):
+
+    for name in invalid_household_name:
+        result = Household.create(name, valid_household_data.description)
+
+        assert result.is_failure
+        assert not result.is_success
+        assert len(result.errors) == 1
+        assert result.errors[0] == HouseholdErrors.invalid_name()
+
+
+def test_create_should_return_failure_result_for_invalid_household_description(
+    valid_household_data, invalid_household_description
+):
+
+    for description in invalid_household_description:
+        result = Household.create(valid_household_data.name, description)
+
+        assert result.is_failure
+        assert not result.is_success
+        assert len(result.errors) == 1
+        assert result.errors[0] == HouseholdErrors.invalid_description()
 
 
 def test_new_should_return_correct_household_instance():

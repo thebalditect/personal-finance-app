@@ -1,7 +1,11 @@
+from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List
+from personal_finance_app.api.modules.ledger.household.errors import HouseholdErrors
 from personal_finance_app.api.modules.ledger.household.member import Member
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
+from personal_finance_app.api.sharedkernel.domain.error import Error
+from personal_finance_app.api.sharedkernel.domain.result import Result
 
 
 @dataclass()
@@ -25,6 +29,34 @@ class Household(BaseEntity):
         self.name = name
         self.description = description
         self.members = []
+
+    @classmethod
+    def create(cls, name: str, description: str) -> Household:
+        errors: List[Error] = []
+
+        for validate in (
+            lambda: cls._validate_name(name),
+            lambda: cls._validate_description(description),
+        ):
+            errors.extend(validate())
+
+        if len(errors) > 0:
+            return Result.failure(errors)
+
+        household = Household(name, description)
+        return Result.success(household)
+
+    @staticmethod
+    def _validate_name(name: str) -> List[Error]:
+        if not name or name.isspace():
+            return [HouseholdErrors.invalid_name()]
+        return []
+
+    @staticmethod
+    def _validate_description(description: str) -> List[Error]:
+        if not description or description.isspace():
+            return [HouseholdErrors.invalid_description()]
+        return []
 
     def add_member(self, member: Member):
 

@@ -14,6 +14,14 @@ class HouseholdErrors:
         )
 
     @classmethod
+    def invalid_description(cls) -> Error:
+        return Error(
+            code=cls.ERROR_CODE,
+            description="description cannot be empty or whitespace.",
+            error_type=ErrorType.VALIDATION,
+        )
+
+    @classmethod
     def invalid_email(cls) -> Error:
         return Error(
             code=cls.ERROR_CODE,
