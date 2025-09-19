@@ -28,25 +28,6 @@ def test_create_should_return_success_result(valid_member_data):
     assert member.id is not None
 
 
-def test_new_should_create_user_instance(valid_member_data):
-    user = Member(
-        valid_member_data.name,
-        valid_member_data.email,
-        valid_member_data.birth_date,
-        valid_member_data.gender,
-        valid_member_data.avatar,
-        valid_member_data.role,
-    )
-
-    assert user.name == valid_member_data.name
-    assert user.email == valid_member_data.email
-    assert user.birth_date == valid_member_data.birth_date
-    assert user.gender == valid_member_data.gender
-    assert user.avatar == valid_member_data.avatar
-    assert user.role == valid_member_data.role
-    assert user.id is not None
-
-
 def test_for_invalid_name_create_should_return_failure_result(
     valid_member_data, invalid_member_name
 ):
@@ -184,3 +165,28 @@ def test_create_should_return_failure_result_while_creating_member_younger_than_
     assert (
         result.errors[0] == HouseholdErrors.member_younger_than_sixteen_years_of_age()
     )
+
+
+def test_create_should_list_all_possible_errors_and_return_failure_result():
+
+    result = Member.create(
+        name="",
+        email="",
+        birth_date=datetime.now(),
+        gender=" ",
+        avatar=b"incorrect",
+        role=MemberRole.REGULAR,
+    )
+
+    assert result.is_failure
+    assert not result.is_success
+    assert len(result.errors) == 5
+
+    expected_errors = [
+        HouseholdErrors.invalid_name(),
+        HouseholdErrors.invalid_email(),
+        HouseholdErrors.member_younger_than_sixteen_years_of_age(),
+        HouseholdErrors.invalid_gender(),
+        HouseholdErrors.invalid_image_format(),
+    ]
+    assert result.errors == expected_errors
