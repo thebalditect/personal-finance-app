@@ -37,6 +37,15 @@ jobs:
               id: lint-code
               run: poetry run ruff check src tests
             
-            - name: Run Tests
+            - name: Run Tests with coverage
               id: run-tests
-              run: poetry run pytest
+              run: |
+                    poetry run coverage run -m pytest
+                    poetry run coverage xml
+                    poetry run coverage report -m
+            
+            - name: Upload Coverage reports to Codecov
+              id: uplod-code-coverage-reports
+              uses: codecov/codecov-action@v5
+              with:
+                token: ${{ secrets.CODECOV_TOKEN }} 
