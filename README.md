@@ -7,5 +7,4 @@
 [![Document Linting Pipeline](https://github.com/thebalditect/personal-finance-app/actions/workflows/ci-document-linting.yml/badge.svg?branch=main)](https://github.com/thebalditect/personal-finance-app/actions/workflows/ci-document-linting.yml)
 
 
-test for signed commit
-
+test for signed commit in
