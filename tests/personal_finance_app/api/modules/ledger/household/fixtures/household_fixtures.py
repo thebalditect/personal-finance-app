@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import pytest
 
-from personal_finance_app.api.modules.ledger.household.household import Household
+from personal_finance_app.api.modules.ledger.household.entities.household import Household
 
 
 @dataclass

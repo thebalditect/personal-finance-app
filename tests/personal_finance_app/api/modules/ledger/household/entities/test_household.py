@@ -1,5 +1,5 @@
-from personal_finance_app.api.modules.ledger.household.errors import HouseholdErrors
-from personal_finance_app.api.modules.ledger.household.household import (
+from personal_finance_app.api.modules.ledger.household.entities.errors import HouseholdErrors
+from personal_finance_app.api.modules.ledger.household.entities.household import (
     Household,
 )
 

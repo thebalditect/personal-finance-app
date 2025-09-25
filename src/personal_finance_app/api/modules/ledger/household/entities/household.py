@@ -1,8 +1,8 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List
-from personal_finance_app.api.modules.ledger.household.errors import HouseholdErrors
-from personal_finance_app.api.modules.ledger.household.member import Member
+from personal_finance_app.api.modules.ledger.household.entities.errors import HouseholdErrors
+from personal_finance_app.api.modules.ledger.household.entities.member import Member
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
 from personal_finance_app.api.sharedkernel.domain.error import Error
 from personal_finance_app.api.sharedkernel.domain.result import Result

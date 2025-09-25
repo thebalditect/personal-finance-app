@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
-from personal_finance_app.api.modules.ledger.household.errors import HouseholdErrors
-from personal_finance_app.api.modules.ledger.household.member import Member
-from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
+from personal_finance_app.api.modules.ledger.household.entities.errors import HouseholdErrors
+from personal_finance_app.api.modules.ledger.household.entities.member import Member
+from personal_finance_app.api.modules.ledger.household.entities.member_role import MemberRole
 
 
 def test_create_should_return_success_result(valid_member_data):

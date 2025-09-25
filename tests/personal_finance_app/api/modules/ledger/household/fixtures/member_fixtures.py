@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 import pytest
 
-from personal_finance_app.api.modules.ledger.household.member import Member
-from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
+from personal_finance_app.api.modules.ledger.household.entities.member import Member
+from personal_finance_app.api.modules.ledger.household.entities.member_role import MemberRole
 
 
 @dataclass

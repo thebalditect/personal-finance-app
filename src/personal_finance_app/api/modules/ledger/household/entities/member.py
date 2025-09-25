@@ -3,8 +3,8 @@ import re
 from dataclasses import dataclass
 from datetime import datetime
 from typing import List
-from personal_finance_app.api.modules.ledger.household.errors import HouseholdErrors
-from personal_finance_app.api.modules.ledger.household.member_role import MemberRole
+from personal_finance_app.api.modules.ledger.household.entities.errors import HouseholdErrors
+from personal_finance_app.api.modules.ledger.household.entities.member_role import MemberRole
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
 from personal_finance_app.api.sharedkernel.domain.result import Result, Error
 
