@@ -1,5 +1,4 @@
 from personal_finance_app.api.modules.ledger.household.application.repositories.household import HouseholdRepository
-from personal_finance_app.api.modules.ledger.household.entities.household import Household
 from personal_finance_app.api.modules.ledger.household.features.create_household.get_household.response import GetHouseholdQueryResponse
 from personal_finance_app.api.sharedkernel.domain.result import Result
 
