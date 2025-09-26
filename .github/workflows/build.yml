@@ -36,6 +36,10 @@ jobs:
             - name: Lint Python Code
               id: lint-code
               run: poetry run ruff check src tests
+
+            - name: Run Type Checks
+              id: run-type-checks
+              run: poetry run mypy ./src --strict
             
             - name: Run Tests with coverage
               id: run-tests
