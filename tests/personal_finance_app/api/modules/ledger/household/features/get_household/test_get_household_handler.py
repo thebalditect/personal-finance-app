@@ -2,7 +2,7 @@
 from unittest.mock import Mock
 from personal_finance_app.api.modules.ledger.household.application.repositories.household import HouseholdRepository
 from personal_finance_app.api.modules.ledger.household.entities.errors import HouseholdErrors
-from personal_finance_app.api.modules.ledger.household.features.create_household.get_household.handler import GetHouseholdQueryHandler
+from personal_finance_app.api.modules.ledger.household.features.get_household.handler import GetHouseholdQueryHandler
 from personal_finance_app.api.sharedkernel.domain.result import Result
 
 
