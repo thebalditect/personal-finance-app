@@ -6,3 +6,4 @@ class ErrorType(str, Enum):
     NOT_FOUND = "NotFound"
     CONFLICT = "Conflict"
     VALIDATION = "Validation"
+    INVALID_STATE = "InvalidState"

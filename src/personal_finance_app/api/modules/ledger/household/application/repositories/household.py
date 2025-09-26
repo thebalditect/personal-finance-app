@@ -11,5 +11,5 @@ class HouseholdRepository(ABC):
         pass
 
     @abstractmethod
-    def get(self, id: uuid4) -> Result[Household]:
+    def get(self) -> Result[Household]:
         pass
