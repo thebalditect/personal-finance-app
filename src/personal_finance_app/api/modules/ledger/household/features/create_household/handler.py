@@ -14,5 +14,9 @@ class CreateHouseholdCommandHandler():
     def handle(self, command: CreateHouseholdCommand) -> Result[None]:
 
         result = Household.create(name= command.name, description= command.description)
+        if result.is_failure:
+            return Result.failure(result.errors)
+        
         self._repository.save(result.value)
+        
         return Result.success(None)
