@@ -1,4 +1,5 @@
 npx markdownlint-cli2 "**/*.md" "#.venv" "#node_modules" --config ./.markdownlint-cli2.yaml
 poetry run ruff check src tests
+poetry run mypy ./src --strict
 poetry run pytest tests/personal_finance_app/arch_tests
 poetry run pytest tests/personal_finance_app/api
