@@ -23,4 +23,5 @@ pytest = "^8.4.2"
 pytestarch = "^4.0.1"
 ruff = "^0.13.0"
 coverage = "^7.10.6"
+mypy = "^1.18.2"
 

@@ -11,17 +11,17 @@ class Error:
     error_type: ErrorType
 
     @staticmethod
-    def failure(code, description) -> Error:
+    def failure(code:str, description: str) -> Error:
         return Error(code, description, ErrorType.FAILURE)
 
     @staticmethod
-    def not_found(code, description) -> Error:
+    def not_found(code: str, description: str) -> Error:
         return Error(code, description, ErrorType.NOT_FOUND)
 
     @staticmethod
-    def conflict(code, description) -> Error:
+    def conflict(code:str, description:str) -> Error:
         return Error(code, description, ErrorType.CONFLICT)
 
     @staticmethod
-    def validation(code, description) -> Error:
+    def validation(code:str, description:str) -> Error:
         return Error(code, description, ErrorType.VALIDATION)

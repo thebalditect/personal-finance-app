@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import List
+from typing import Callable, List
 from personal_finance_app.api.modules.ledger.household.entities.errors import HouseholdErrors
 from personal_finance_app.api.modules.ledger.household.entities.member import Member
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
@@ -25,10 +25,11 @@ class Household(BaseEntity):
     def create(cls, name: str, description: str) -> Result[Household]:
         errors: List[Error] = []
 
-        for validate in (
-            lambda: cls._validate_name(name),
-            lambda: cls._validate_description(description),
-        ):
+        validators: tuple[Callable[[], List[Error]], ...] = (
+        lambda: cls._validate_name(name),
+        lambda: cls._validate_description(description),)
+
+        for validate in validators:
             errors.extend(validate())
 
         if len(errors) > 0:
@@ -67,11 +68,14 @@ class Household(BaseEntity):
         return Result.success(None)
 
     def remove_member(self, member: Member) -> Result[None]:
+        # Find the index of the member if it exists
+        index = next(
+            (i for i, existing_member in enumerate(self.members)
+            if existing_member.email.lower() == member.email.lower()),
+            None
+        )
 
-        if not any(
-            existing_member.email.lower() == member.email.lower()
-            for existing_member in self.members
-        ):
+        if index is None:
             return Result.failure(
                 [
                     HouseholdErrors.member_does_not_exist_in_household(
@@ -80,7 +84,6 @@ class Household(BaseEntity):
                 ]
             )
 
-        for counter, existing_member in enumerate(self.members):
-            if existing_member.email.lower() == member.email.lower():
-                del self.members[counter]
-                return Result.success(None)
+        del self.members[index]
+        return Result.success(None)
+

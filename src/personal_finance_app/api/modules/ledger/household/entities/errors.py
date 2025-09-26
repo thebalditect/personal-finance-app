@@ -33,7 +33,7 @@ class HouseholdErrors:
 
     @classmethod
     def invalid_gender(cls) -> Error:
-        Error(
+        return Error(
             code=cls.ERROR_CODE,
             description="gender should not be empty or just whitespace.",
             error_type=ErrorType.VALIDATION,
@@ -48,7 +48,7 @@ class HouseholdErrors:
         )
 
     @classmethod
-    def unborn_member(cls):
+    def unborn_member(cls) -> Error:
         return Error(
             code=cls.ERROR_CODE,
             description="birth date cannot be in future.",
@@ -56,7 +56,7 @@ class HouseholdErrors:
         )
 
     @classmethod
-    def member_younger_than_sixteen_years_of_age(cls):
+    def member_younger_than_sixteen_years_of_age(cls) -> Error:
         return Error(
             code=cls.ERROR_CODE,
             description="member should be at least sixteen years old as on today.",
@@ -64,7 +64,7 @@ class HouseholdErrors:
         )
 
     @classmethod
-    def member_already_added_to_household(cls, email: str):
+    def member_already_added_to_household(cls, email: str) -> Error:
         return Error(
             code=cls.ERROR_CODE,
             description=f"Member with {email} is already a member of the household.",
@@ -72,7 +72,7 @@ class HouseholdErrors:
         )
 
     @classmethod
-    def member_does_not_exist_in_household(cls, email: str):
+    def member_does_not_exist_in_household(cls, email: str) -> Error:
         return Error(
             code=cls.NOT_FOUND_ERROR_CODE,
             description=f"Member with {email} is not an existing member of the household.",

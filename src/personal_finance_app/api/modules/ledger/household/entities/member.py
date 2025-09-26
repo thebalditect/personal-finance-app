@@ -2,11 +2,12 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List
+from typing import Callable, List
 from personal_finance_app.api.modules.ledger.household.entities.errors import HouseholdErrors
 from personal_finance_app.api.modules.ledger.household.entities.member_role import MemberRole
 from personal_finance_app.api.sharedkernel.domain.base_entity import BaseEntity
-from personal_finance_app.api.sharedkernel.domain.result import Result, Error
+from personal_finance_app.api.sharedkernel.domain.result import Result
+from personal_finance_app.api.sharedkernel.domain.error import Error
 
 
 @dataclass
@@ -53,13 +54,15 @@ class Member(BaseEntity):
 
         errors: List[Error] = []
 
-        for validate in (
+        validators: tuple[Callable[[], List[Error]],...] = (
             lambda: cls._validate_name(name),
             lambda: cls._validate_email(email),
             lambda: cls._validate_age(birth_date),
             lambda: cls._validate_gender(gender),
             lambda: cls._validate_avatar(avatar),
-        ):
+        )
+
+        for validate in validators:
             errors.extend(validate())
 
         if len(errors) > 0:
