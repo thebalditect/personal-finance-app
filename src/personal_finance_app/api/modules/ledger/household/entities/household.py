@@ -22,7 +22,7 @@ class Household(BaseEntity):
         self.members = []
 
     @classmethod
-    def create(cls, name: str, description: str) -> Household:
+    def create(cls, name: str, description: str) -> Result[Household]:
         errors: List[Error] = []
 
         for validate in (
